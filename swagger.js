@@ -6,7 +6,7 @@ const doc = {
     version: '1.0.0'
   },
   host: 'localhost:3000',
-  schemes: ['http'],
+  schemes: ['http', 'https'],
   tags: [
     { name: 'Users', description: 'User operations' },
     { name: 'Products', description: 'Product operations' }
