@@ -9,6 +9,7 @@ const session = require('express-session');
 const GitHubStrategy = require('passport-github2').Strategy;
 const cors = require('cors');
 const routes = require('./routes');
+const MongoStore = require('connect-mongo'); // NEW REQUIRE
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -20,12 +21,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Session configuration
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || 'secret',
+    secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false, // Changed from true to false
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI,
+      ttl: 14 * 24 * 60 * 60 // 14 days expiration
+    }),
     cookie: {
       secure: process.env.NODE_ENV === 'production',
-      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+      maxAge: 1000 * 60 * 60 * 24 // 24 hours
     }
   })
 );
