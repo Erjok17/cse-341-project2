@@ -9,6 +9,7 @@ const session = require('express-session');
 const GitHubStrategy = require('passport-github2').Strategy;
 const cors = require('cors');
 const routes = require('./routes');
+const MongoStore = require('connect-mongo'); // NEW REQUIRE
 
 
 const app = express();
