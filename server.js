@@ -19,23 +19,23 @@ const port = process.env.PORT || 3000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// Session configuration
+// Replace your session middleware with this:
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || 'fallback-secret-for-dev-only', // Never use fallback in production
     resave: false,
-    saveUninitialized: false, // Changed from true to false
+    saveUninitialized: false,
     store: MongoStore.create({
       mongoUrl: process.env.MONGODB_URI,
-      ttl: 14 * 24 * 60 * 60 // 14 days expiration
+      ttl: 14 * 24 * 60 * 60 // 14 days
     }),
     cookie: {
       secure: process.env.NODE_ENV === 'production',
-      maxAge: 1000 * 60 * 60 * 24 // 24 hours
+      sameSite: 'strict',
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
     }
   })
 );
-
 // Passport initialization
 app.use(passport.initialize());
 app.use(passport.session());
